@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { background: #0a192f; color: white; font-family: sans-serif; padding: 20px; }
+        .scroll { display: flex; overflow-x: auto; gap: 20px; padding: 20px; }
+        .card { background: #112240; padding: 15px; border-radius: 15px; min-width: 100px; text-align: center; }
+    </style>
+</head>
+<body>
+    <h2>Usuários Online</h2>
+    <div id="lista" class="scroll"></div>
+
+    <script type="module">
+        import { rtdb } from './config.js';
+        import { ref, onValue } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+
+        onValue(ref(rtdb, 'status/'), (snap) => {
+            const div = document.getElementById('lista');
+            div.innerHTML = "";
+            snap.forEach(c => {
+                if(c.val().state === 'online') {
+                    div.innerHTML += `<div class="card" onclick="location.href='chat.html?to=${c.key}'">
+                        <p>${c.val().nome}</p></div>`;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
